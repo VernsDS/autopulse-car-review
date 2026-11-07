@@ -1,0 +1,36 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Car {
+  id          Int      @id @default(autoincrement())
+  brand       String
+  model       String
+  year        Int
+  description String?
+  reviews     Review[]
+}
+
+model Sparepart {
+  id       Int      @id @default(autoincrement())
+  name     String
+  category String
+  reviews  Review[]
+}
+
+model Review {
+  id          Int       @id @default(autoincrement())
+  rating      Int
+  content     String
+  car         Car       @relation(fields: [carId], references: [id])
+  carId       Int
+  sparepart   Sparepart @relation(fields: [sparepartId], references: [id])
+  sparepartId Int
+  createdAt   DateTime  @default(now())
+}
